@@ -3,8 +3,7 @@
 #include "model.h"
 
 bool Model::parseString(const char *input) {
-  bool status = true;
-  char operators[] = "+-/()^x*";
+  char operators[] = "+-/()^x*%";
   char numbers[] = "1234567890.";
   _queue.push(std::make_pair(BRACK_O, 0));
   for (char *p = (char *)input; *p != '\0'; p++) {
@@ -36,7 +35,6 @@ bool Model::parseString(const char *input) {
           _queue.push(std::make_pair(BRACK_O, 0));
           if (*(p + 1) == '-') {
             _queue.push(std::make_pair(NUM, 0));
-            p++;
           } else if (*(p + 1) == '+') {
             p++;
           }
@@ -44,8 +42,8 @@ bool Model::parseString(const char *input) {
         case ')':
           _queue.push(std::make_pair(BRACK_C, 0));
           break;
-        default:
-          status = false;
+        case '%':
+          _queue.push(std::make_pair(MOD, 0));
           break;
       }
     } else if (strnstr(p, "cos", 3)) {
@@ -78,7 +76,7 @@ bool Model::parseString(const char *input) {
     } else if (*p == ' ') {
       continue;
     } else {
-      status = false;
+      return false;
     }
   }
 
@@ -91,9 +89,7 @@ bool Model::parseString(const char *input) {
   }
 #endif
 
-  status = checkString();
-
-  return status;
+  return checkString();
 }
 
 // check if the string is valid
@@ -101,15 +97,14 @@ bool Model::parseString(const char *input) {
 bool Model::checkString() {
   bool status = true;
   type_t prev = NONE;
+  int brack_o_counter = 0;
+  int brack_c_counter = 0;
+  int final_close = 0;
+
   for (std::queue<std::pair<type_t, double> > dump = _queue; !dump.empty();
        dump.pop()) {
     type_t type = dump.front().first;
-    if (type == NUM) {
-      if (prev == NUM || prev == BRACK_C || prev == X) {
-        status = false;
-        break;
-      }
-    } else if (type == X) {
+    if (type == NUM || type == X) {
       if (prev == NUM || prev == BRACK_C || prev == X) {
         status = false;
         break;
@@ -133,14 +128,25 @@ bool Model::checkString() {
         status = false;
         break;
       }
+      brack_o_counter++;
     } else if (type == BRACK_C) {
       if (prev == PLUS || prev == MINUS || prev == MUL || prev == DIV ||
           prev == MOD || prev == EXP || prev == BRACK_O || prev == NONE) {
         status = false;
         break;
       }
+      brack_c_counter++;
+      if (brack_o_counter < brack_c_counter) {
+        status = false;
+        break;
+      }
+      if (brack_c_counter == brack_o_counter) final_close++;
     }
     prev = type;
   }
+
+  if (brack_o_counter != brack_c_counter) status = false;
+  if (final_close > 1) status = false;
+
   return status;
 }

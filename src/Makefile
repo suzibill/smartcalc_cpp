@@ -5,14 +5,17 @@ TESTFLAGS=-lgtest
 TESTFILES= tests/test.cc
 SRC = model/*.cc
 
-all: test1
+all: clean test1
 
 test: $(TESTFILES) 
 	./test
 
 test1: $(TESTFILES)
-	$(CC) $(TESTFILES) -o test $(TESTFLAGS) $(SRC) $(STANDART) -g -DDEBUG
+	$(CC) $(TESTFILES) -o test $(TESTFLAGS) $(SRC) $(STANDART) -g #-DDEBUG
 	./test
 
 leak: 
 	leaks -atExit -- ./test
+
+clean:
+	rm -rf test

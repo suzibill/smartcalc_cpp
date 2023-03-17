@@ -18,7 +18,7 @@ double Model::Calculate(double x) {
     } else {
       double a = stack.top();
       stack.pop();
-      bool flag = false;
+      bool is_binary_op = false;
       switch (p.first) {
         case COS:
           stack.push(cos(a));
@@ -48,10 +48,10 @@ double Model::Calculate(double x) {
           stack.push(log10(a));
           break;
         default:
-          flag = true;
+          is_binary_op = true;
           break;
       }
-      if (flag == false) continue;
+      if (is_binary_op == false) continue;
       double b = stack.top();
       stack.pop();
       switch (p.first) {
@@ -65,10 +65,17 @@ double Model::Calculate(double x) {
           stack.push(a * b);
           break;
         case DIV:
-          stack.push(b / a);
+          if (a == 0) {
+            stack.push(NAN);
+          } else {
+            stack.push(b / a);
+          }
           break;
         case EXP:
           stack.push(pow(b, a));
+          break;
+        case MOD:
+          stack.push(fmod(b, a));
           break;
         default:
           break;
