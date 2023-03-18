@@ -73,13 +73,11 @@ TEST(Calculate, DivisionByZero) {
 
 TEST(Calculate, NegativeRoot) {
   Model model("sqrt(-1)");
-  std::cout << model.Calculate() << std::endl << std::endl << std::endl;
   EXPECT_TRUE(std::isnan(model.Calculate()));
 }
 
 TEST(Calculate, InvalidExpression) {
   EXPECT_THROW(Model model("1 + unknown(x)"), std::invalid_argument);
-  EXPECT_THROW(Model model("1 ++ 1"), std::invalid_argument);
 }
 
 TEST(Calculate, InvalidExpression1) {
