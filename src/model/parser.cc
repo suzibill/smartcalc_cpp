@@ -1,5 +1,3 @@
-
-
 #include "model.h"
 
 bool Model::parseString(const char *input) {

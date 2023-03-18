@@ -65,7 +65,7 @@ double Model::Calculate(double x) {
           stack.push(a * b);
           break;
         case DIV:
-          if (a == 0) {
+          if (a < 1E-06) {
             stack.push(NAN);
           } else {
             stack.push(b / a);
