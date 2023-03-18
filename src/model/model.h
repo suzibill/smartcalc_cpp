@@ -2,6 +2,7 @@
 #define MODEL_H
 #include <cmath>
 #include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <queue>
 #include <stack>
