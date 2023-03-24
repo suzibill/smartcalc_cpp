@@ -4,10 +4,8 @@ STANDART= -std=c++17
 TESTFLAGS=-lgtest
 OS= $(shell uname)
 TESTFILES= tests/test.cc
-SRC = model/*.cc view/*.cc controller/*.cc
+SRC = model/*.cc
 PROJECT_NAME= smart_calc
-
-
 
 all: install
 
@@ -28,11 +26,11 @@ execution:
 	open calc/view.app
 
 test: $(TESTFILES)
-	$(CC) $(TESTFILES) $(TESTFLAGS) $(STANDART) $(CFLAGS) model/*.cc  -o test 
+	$(CC) $(TESTFILES) $(TESTFLAGS) $(STANDART) $(CFLAGS) $(SRC)  -o test 
 	./test
 
 gcov_report: clean 
-	$(CC) --coverage $(TEST_FLAGS) $(CFLAGS) $(SOURCES) $(TEST_FILES) -o test
+	$(CC) --coverage $(TESTFILES) $(TESTFLAGS) $(STANDART) $(CFLAGS) model/*.cc -o test
 		
 	./test
 	lcov -t "test" -o test.info -c -d . 
