@@ -108,7 +108,7 @@ TEST(Calculate, InvalidExpression7) {
   EXPECT_THROW(Model model("(12))+(12"), std::invalid_argument);
 }
 
-TEST(Calculate, Spizdil) {
+TEST(Calculate, Additional) {
   EXPECT_ANY_THROW(Model model("(1+2"));
   EXPECT_ANY_THROW(Model model("13 13"));
   EXPECT_ANY_THROW(Model model("sin(x)) - f"));
