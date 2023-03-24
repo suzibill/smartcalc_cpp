@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# additional
+.vscode
+.DS_Store
+test
+test.dSYM
